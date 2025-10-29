@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Timetable update="2025-04-07" type="通常">
     <Stop>
-        <Route name="JR八王子駅南口行">
+        <Route name="JR八王子駅南口便">
             <Weekday>
                 <Departure time="1325" note="２台同時発車"/>
                 <Departure time="1330" note=""/>
@@ -38,7 +38,7 @@
                 <Departure time="1815" note=""/>
             </Saturday>
         </Route>
-        <Route name="京王八王子行">
+        <Route name="京王八王子便">
             <Weekday>
                 <Departure time="1328" note=""/>
                 <Departure time="1458" note=""/>
@@ -75,7 +75,7 @@
                 <Departure time="1813" note=""/>
             </Saturday>
         </Route>
-        <Route name="南大沢駅行">
+        <Route name="南大沢便">
             <Weekday>
                 <Departure time="1326" note="京王八王子経由"/>
                 <Departure time="1456" note="京王八王子・JR八王子南口経由"/>
@@ -98,7 +98,7 @@
                 <Departure time="1811" note="京王八王子経由"/>
             </Saturday>
         </Route>
-        <Route name="拝島行">
+        <Route name="拝島便">
             <Weekday>
                 <Departure time="1325" note=""/>
                 <Departure time="1330" note=""/>
