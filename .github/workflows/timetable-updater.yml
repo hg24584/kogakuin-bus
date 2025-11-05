@@ -1,11 +1,16 @@
 name: Python Timetable updater
 
 on:
+  push:
+  workflow_dispatch:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '0 0 * * *'
+
 
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -14,9 +19,20 @@ jobs:
           python-version: '3.14'
       - name: Install dependencies
         run: |
-          python -m pip install --upgrage pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run Python Script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python updater.py
+        run: |
+          python updater.py
+      - name: Commit
+        id: commit
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add timetable.json
+          git diff-index --quiet HEAD || (git commit -m 'update timetable.json yyyy/mm/dd hh:mm:ss' && echo "::set-output name=push::true")
+      - name: Push
+        if: steps.commit.outputs.push
+        run: git push origin HEAD:main

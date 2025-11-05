@@ -1,4 +1,3 @@
 beautifulsoup4
 google-genai
 httpx
-python-dotenv

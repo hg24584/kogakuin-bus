@@ -4,9 +4,6 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 from bs4 import BeautifulSoup
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
-from github import Github
-from github import Auth
 import requests
 import httpx
 import json
@@ -15,14 +12,7 @@ import os
 import re
 
 url = "https://www.js.kogakuin.ac.jp/student/office/bus.html"
-repo_path = "hg24584/kogakuin-bus"
 gemini_model = "gemini-2.5-flash"
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GITHUB_REST_TOKEN = os.getenv("GITHUB_REST_TOKEN")
-auth = Auth.Token(GITHUB_REST_TOKEN)
-g = Github(auth=auth)
 
 
 def geminiOCR(doc):
@@ -79,20 +69,21 @@ def getPdfUrl():
     return PDF_list
 
 def githubUpdate(merged_result):
-    try:
-        json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
-        repo = g.get_repo(repo_path)
-        contents = repo.get_contents("timetable.json", ref="main")
-        repo.update_file(
-            path = contents.path,
-            message = f"automatic update timetable.json {time.strftime('%Y-%m-%d %H:%M:%S')}",
-            content = json_data,
-            sha = contents.sha,
-        )
-    except Exception as e:
-        print("error: ", e)
-    finally:
-        g.close()
+    pass
+    # try:
+    #     json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
+    #     repo = g.get_repo(repo_path)
+    #     contents = repo.get_contents("timetable.json", ref="main")
+    #     repo.update_file(
+    #         path = contents.path,
+    #         message = f"automatic update timetable.json {time.strftime('%Y-%m-%d %H:%M:%S')}",
+    #         content = json_data,
+    #         sha = contents.sha,
+    #     )
+    # except Exception as e:
+    #     print("error: ", e)
+    # finally:
+    #     g.close()
 
 
 def main():
