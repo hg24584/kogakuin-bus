@@ -31,8 +31,9 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          if (git diff --porcelain | grep '[0-9]'); then \
+          if (git diff --shortstat | grep '[0-9]'); then \
             git add "timetable.json"; \
-            git commit -m "GitHub Actions yyyy/mm/dd hh:mm:ss"; \
+            timestamp=$(date +"%Y/%m/%d %H:%M:%S") \
+            git commit -m "GitHub Actions ${timestamp}" \
             git push origin HEAD:${GITHUB_REF}; \
           fi
