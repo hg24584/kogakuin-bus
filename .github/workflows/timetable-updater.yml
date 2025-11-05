@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
@@ -31,9 +33,10 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          if (git diff --shortstat | grep '[0-9]'); then \
-            git add "timetable.json"; \
-            timestamp=$(date +"%Y/%m/%d %H:%M:%S") \
-            git commit -m "GitHub Actions ${timestamp}" \
-            git push origin HEAD:${GITHUB_REF}; \
+          if [[ -n "$(git status --porcelain timetable.json)" ]]; then
+            git add timetable.json
+            timestamp=$(date +"%Y/%m/%d %H:%M:%S")
+            git commit -m "GitHub Actions ${timestamp}"
+            branch_name="${GITHUB_REF#refs/heads/}"
+            git push origin HEAD:${branch_name}
           fi
