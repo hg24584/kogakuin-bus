@@ -26,13 +26,13 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python updater.py
-      - name: Commit
+      - name: Commit and Push
         id: commit
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add timetable.json
-          git diff-index --quiet HEAD || (git commit -m 'update timetable.json yyyy/mm/dd hh:mm:ss' && echo "::set-output name=push::true")
-      - name: Push
-        if: steps.commit.outputs.push
-        run: git push origin HEAD:main
+          if (git diff --porcelain | grep '[0-9]'); then \
+            git add "timetable.json"; \
+            git commit -m "GitHub Actions yyyy/mm/dd hh:mm:ss"; \
+            git push origin HEAD:${GITHUB_REF}; \
+          fi

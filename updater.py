@@ -4,6 +4,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 from bs4 import BeautifulSoup
 from google import genai
 from google.genai import types
+import subprocess
 import requests
 import httpx
 import json
@@ -69,7 +70,6 @@ def getPdfUrl():
     return PDF_list
 
 def githubUpdate(merged_result):
-    pass
     # try:
     #     json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
     #     repo = g.get_repo(repo_path)
@@ -84,6 +84,10 @@ def githubUpdate(merged_result):
     #     print("error: ", e)
     # finally:
     #     g.close()
+    json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
+    with open("timetable.json", "w", encoding="utf-8") as f:
+        f.write(json_data)
+    print("complete")
 
 
 def main():
