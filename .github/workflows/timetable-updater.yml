@@ -1,9 +1,9 @@
 name: Python Timetable updater
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 0,3 * * *'
+    - cron: "0 0,3 * * *"
+  workflow_dispatch:
 
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
           if [[ -n "$(git status --porcelain timetable.json)" ]]; then
             git add timetable.json
             timestamp=$(date +"%Y/%m/%d %H:%M:%S")
-            git commit -m "GitHub Actions ${timestamp}"
+            git commit -m "GitHub Actions UTC ${timestamp}"
             branch_name="${GITHUB_REF#refs/heads/}"
             git push origin HEAD:${branch_name}
           fi
