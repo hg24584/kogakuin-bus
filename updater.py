@@ -1,9 +1,11 @@
 import os
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
+
+from datetime import datetime
 from bs4 import BeautifulSoup
-from google import genai
 from google.genai import types
+from google import genai
 import subprocess
 import requests
 import httpx
@@ -11,7 +13,6 @@ import json
 import time
 import os
 import re
-from datetime import datetime
 
 url = "https://www.js.kogakuin.ac.jp/student/office/bus.html"
 gemini_model = "gemini-2.5-flash"
@@ -85,7 +86,7 @@ def githubUpdate(merged_result):
     #     print("error: ", e)
     # finally:
     #     g.close()
-    merged_result["update_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    merged_result["update_time"] = datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S") + " JST"
     json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
     with open("timetable.json", "w", encoding="utf-8") as f:
         f.write(json_data)
