@@ -33,9 +33,9 @@ def geminiOCR(doc):
             prompt
         ]
     )
-    raw = respons.text.strip()
-    match = re.search(r'\{[\s\S]*\}', raw)
     try:
+        raw = respons.text.strip()
+        match = re.search(r'\{[\s\S]*\}', raw)
         data_json = json.loads(match.group(0))
     except Exception as e:
         print(e)
