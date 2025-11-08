@@ -11,7 +11,7 @@ import json
 import time
 import os
 import re
-import datetime from datetime
+from datetime import datetime
 
 url = "https://www.js.kogakuin.ac.jp/student/office/bus.html"
 gemini_model = "gemini-2.5-flash"
@@ -21,7 +21,7 @@ def geminiOCR(doc):
     client = genai.Client()
     doc_data = httpx.get(doc).content
 
-    prompt = 'このPDFデータは工学院大学附属中学校・高等学校のバス時刻表です。PDFの時刻表を解析し、「下校便の」みの時刻を添付のJSONの形式で日付ごとにまとめ、その日付内で行先ごとに分類してください。日付が範囲指定であれば一日ごとに書いてください。時刻は"hhmm"で:は不要です。コードブロック(```json など)は付けないでください。必ずJSONのみで返答してください。サンプルのJSONは以下の通りです。{"2025-10-01":{"JR八王子駅南口便":["1325②","1330","1455","1458京"],"京王八王子便":["1328","1458","1550"],"南大沢便":["1326京","1456京JR","1551京"],"拝島便":["1325","1330","1455","1458②","1600"]}}'
+    prompt = 'このPDFデータは工学院大学附属中学校・高等学校のバス時刻表です。PDFの時刻表を解析し、「下校便の」みの時刻を添付のJSONの形式で日付ごとにまとめ、その日付内で行先ごとに分類してください。日付が範囲指定であれば一日ごとに書いてください。時刻は"hhmm"で:は不要です。コードブロック(```json など)は付けないでください。必ずJSONのみで返答してください。下校便がPDFに含まれていない場合はjsonを返さないでください。サンプルのJSONは以下の通りです。{"2025-10-01":{"JR八王子駅南口便":["1325②","1330","1455","1458京"],"京王八王子便":["1328","1458","1550"],"南大沢便":["1326京","1456京JR","1551京"],"拝島便":["1325","1330","1455","1458②","1600"]}}'
     print("now generating...")
     respons = client.models.generate_content(
         model=gemini_model,
@@ -85,7 +85,7 @@ def githubUpdate(merged_result):
     #     print("error: ", e)
     # finally:
     #     g.close()
-    merged_result["update_time"] = datetime.now()
+    merged_result["update_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
     with open("timetable.json", "w", encoding="utf-8") as f:
         f.write(json_data)
