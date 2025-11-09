@@ -102,22 +102,22 @@ def main():
     merged_result = {}
     for link in links[1:]:
         attempts = 0
-        while attempts < 3:
+        while attempts < 5:
             results = []
-            for _ in range(3):
+            for _ in range(5):
                 data = geminiOCR(link)
                 if data is None:
                     break
                 results.append(data)
                 time.sleep(30)
 
-            if len(results) < 3:
+            if len(results) < 5:
                 print("OCRに失敗しました。60秒後に再試行します...")
                 attempts += 1
                 time.sleep(60)
                 continue
 
-            if results[0] == results[1] == results[2]:
+            if results[0] == results[1] == results[2] == results[3] == results[4]:
                 print(f"{link} のOCR結果が全て一致しました。")
                 for day, routes in results[0].items():
                     merged_result.setdefault(day, {}).update(routes)
