@@ -109,12 +109,12 @@ def main():
                 if data is None:
                     break
                 results.append(data)
-                time.sleep(60)
+                time.sleep(120)
 
             if len(results) < 5:
-                print("OCRに失敗しました。60秒後に再試行します...")
+                print("OCRに失敗しました。120秒後に再試行します...")
                 attempts += 1
-                time.sleep(60)
+                time.sleep(120)
                 continue
 
             if results[0] == results[1] == results[2] == results[3] == results[4]:
@@ -123,9 +123,9 @@ def main():
                     merged_result.setdefault(day, {}).update(routes)
                 break
             else:
-                print("OCR結果が一致しませんでした。60秒後に再試行します...")
+                print("OCR結果が一致しませんでした。120秒後に再試行します...")
                 attempts += 1
-                time.sleep(60)
+                time.sleep(120)
         else:
             print(f"{link} のOCR結果は最大試行回数でも一致しませんでした。次のPDFへ進みます。")
 
