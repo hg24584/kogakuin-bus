@@ -45,7 +45,7 @@ def geminiOCR(doc):
     data = json.dumps(data_json, indent=1, ensure_ascii=False)
     print("generated")
     # print(data)
-    time.sleep(5)
+    time.sleep(10)
     return data_json
 
 def getPdfUrl():
@@ -109,7 +109,7 @@ def main():
                 if data is None:
                     break
                 results.append(data)
-                time.sleep(30)
+                time.sleep(60)
 
             if len(results) < 5:
                 print("OCRに失敗しました。60秒後に再試行します...")
