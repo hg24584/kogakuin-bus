@@ -10,6 +10,7 @@ from google import genai
 import subprocess
 import requests
 import httpx
+import random
 import json
 import time
 import os
@@ -25,28 +26,29 @@ def geminiOCR(doc):
 
     prompt = 'このPDFデータは工学院大学附属中学校・高等学校のバス時刻表です。PDFの時刻表を解析し、通常ダイヤ以外の「下校便の」みの時刻を添付のJSONの形式で日付ごとにまとめ、その日付内で行先ごとに分類してください。日付が範囲指定であれば一日ごとに書いてください。運行予定の表は参照せず、追加・臨時運行予定を参考にしてください。時刻は"hhmm"で:は不要です。コードブロック(```json など)は付けないでください。必ずJSONのみで返答してください。下校便がPDFに含まれていない場合はjsonを返さないでください。サンプルのJSONは以下の通りです。{"2025-10-01":{"JR八王子駅南口便":["1325②","1330","1455","1458京"],"京王八王子便":["1328","1458","1550"],"南大沢便":["1326京","1456京JR","1551京"],"拝島便":["1325","1330","1455","1458②","1600"]}}'
     print("now generating...")
-    respons = client.models.generate_content(
-        model=gemini_model,
-        contents=[
-            types.Part.from_bytes(
-                data=doc_data,
-                mime_type="application/pdf"
-            ),
-            prompt
-        ]
-    )
-    try:
-        raw = respons.text.strip()
-        match = re.search(r'\{[\s\S]*\}', raw)
-        data_json = json.loads(match.group(0))
-    except Exception as e:
-        print(e)
-        return None
-    data = json.dumps(data_json, indent=1, ensure_ascii=False)
-    print("generated")
-    # print(data)
-    time.sleep(10)
-    return data_json
+    for attempt in range(5):
+        try:
+            response = client.models.generate_content(
+                model=gemini_model,
+                contents=[
+                    types.Part.from_bytes(
+                        data=doc_data,
+                        mime_type="application/pdf"
+                    ),
+                    prompt
+                ]
+            )
+            raw = response.text.strip()
+            match = re.search(r'\{[\s\S]*\}', raw)
+            data_json = json.loads(match.group(0))
+            print("generated")
+            return data_json
+
+        except Exception as e:
+            print(f"Gemini API エラー: {e}")
+            wait = (2 ** attempt) * 60 + random.randint(0, 30)
+            print(f"{wait}秒後に再試行します...")
+            time.sleep(wait)
 
 def getPdfUrl():
     get_attempt = 1
