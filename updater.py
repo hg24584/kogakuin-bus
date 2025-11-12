@@ -46,7 +46,7 @@ def geminiOCR(doc):
 
         except Exception as e:
             print(f"Gemini API エラー: {e}")
-            wait = (2 ** attempt) * 60 + random.randint(0, 30)
+            wait = 120
             print(f"{wait}秒後に再試行します...")
             time.sleep(wait)
 
@@ -104,22 +104,22 @@ def main():
     merged_result = {}
     for link in links[1:]:
         attempts = 0
-        while attempts < 5:
+        while attempts < 3:
             results = []
-            for _ in range(5):
+            for _ in range(3):
                 data = geminiOCR(link)
                 if data is None:
                     break
                 results.append(data)
                 time.sleep(120)
 
-            if len(results) < 5:
+            if len(results) < 3:
                 print("OCRに失敗しました。120秒後に再試行します...")
                 attempts += 1
                 time.sleep(120)
                 continue
 
-            if results[0] == results[1] == results[2] == results[3] == results[4]:
+            if results[0] == results[1] == results[2]:
                 print(f"{link} のOCR結果が全て一致しました。")
                 for day, routes in results[0].items():
                     merged_result.setdefault(day, {}).update(routes)
