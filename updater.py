@@ -89,7 +89,8 @@ def githubUpdate(merged_result):
     #     print("error: ", e)
     # finally:
     #     g.close()
-    merged_result["update_time"] = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S") + " JST"
+
+    # merged_result["update_time"] = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S") + " JST"
     json_data = json.dumps(merged_result, sort_keys=True, indent=4, ensure_ascii=False)
     with open("timetable.json", "w", encoding="utf-8") as f:
         f.write(json_data)
